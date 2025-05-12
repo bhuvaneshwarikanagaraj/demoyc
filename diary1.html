@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Detective's Diary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    
+
+
+    <style>
+        body {
+            margin: 0;
+            padding: 10px;
+            min-height: 100vh;
+            background: #F5E6D3;
+            font-family: 'Special Elite', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .diary-container {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            position: relative;
+            margin: 10px;
+            border: 1px solid #8B4513;
+        }
+
+        .diary-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #8B4513;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 10px;
+        }
+
+        .diary-header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .question-section {
+            background: rgba(139, 69, 19, 0.1);
+            padding: 15px;
+            margin: 10px 0 20px 0;
+            border-left: 3px solid #8B4513;
+            color: #4A2511;
+            font-size: 1.1em;
+        }
+
+        .question-section h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+            color: #8B4513;
+        }
+
+        .diary-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        textarea {
+            padding: 15px;
+            border: none;
+            font-family: 'Special Elite', cursive;
+            font-size: 1.1em;
+            line-height: 2em;
+            min-height: 400px;
+            background-image: linear-gradient(#F5E6D3 1px, transparent 1px);
+            background-size: 100% 2em;
+            background-color: transparent;
+            color: #4A2511;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        .submit-btn {
+            background: #8B4513;
+            color: #F5E6D3;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Special Elite', cursive;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #6B3410;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: #8B4513;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-family: 'Special Elite', cursive;
+            padding: 10px;
+        }
+
+        .back-btn:hover {
+            color: #6B3410;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0;
+            }
+            
+            .diary-container {
+                padding: 15px;
+                margin: 0;
+                min-height: 100vh;
+                border-radius: 0;
+                border: none;
+            }
+
+            .diary-header {
+                margin-top: 40px;
+            }
+
+            textarea {
+                min-height: 300px;
+            }
+
+            .back-btn {
+                top: 10px;
+                left: 10px;
+            }
+        }
+
+        .success-message {
+            display: none;
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4CAF50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .success-message h2 {
+            color: #4CAF50;
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+
+        .success-message p {
+            color: #2E7D32;
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+
+        .field-message {
+            background: rgba(139, 69, 19, 0.05);
+            border-left: 3px solid #8B4513;
+            padding: 15px;
+            margin: 20px 0;
+            color: #4A2511;
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .next-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Special Elite', cursive;
+            font-size: 1.1em;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .next-button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="diary-container">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <div class="diary-header">
+            <h1>Diary</h1>
+        </div>
+        <div class="question-section">
+            <h2>Case Question:</h2>
+            Why was Ferret very hesitant to attend the case?
+        </div>
+        <form class="diary-form" id="diaryForm">
+            <textarea id="entry" name="entry" placeholder="Write your thoughts here..."></textarea>
+            <button type="submit" class="submit-btn">Save Entry</button>
+            <div id="successMessage" class="success-message" style="display: none;">
+                <h2>🎉 Congratulations!</h2>
+                <p>Your diary entry has been saved successfully.</p>
+                <p>You've completed this task. Feel free to stay on this page or go back when you're ready.</p>
+            </div>
+        </form>
+        <div class="success-message" id="successMessage">
+            <h2>🎉 Congratulations, Detective! 🎉</h2>
+            <p>Your insightful analysis has been recorded in the case files.</p>
+            <p>You've successfully completed Episode 1 of the investigation.</p>
+            <p>Ready to continue your detective journey?</p>
+            <button class="next-button" onclick="handleNextEpisode()">Continue to Next Episode →</button>
+        </div>
+    </div>
+
+    <script>
+        // Add auto-save functionality
+        function saveToLocalStorage(text) {
+            localStorage.setItem('diary1_temp_entry', text);
+        }
+
+        function loadFromLocalStorage() {
+            const savedText = localStorage.getItem('diary1_temp_entry');
+            if (savedText) {
+                document.getElementById('entry').value = savedText;
+            }
+        }
+
+        function clearTempStorage() {
+            localStorage.removeItem('diary1_temp_entry');
+        }
+
+        // Load saved text when page loads
+        window.addEventListener('DOMContentLoaded', loadFromLocalStorage);
+
+        // Add autosave to textarea
+        document.getElementById('entry').addEventListener('input', function() {
+            saveToLocalStorage(this.value);
+        });
+
+        // Update form submission handler
+        document.getElementById('diaryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const entryText = document.getElementById('entry').value.trim();
+            const submitButton = document.querySelector('.submit-btn');
+            const successMessage = document.getElementById('successMessage');
+            
+            if (!entryText) {
+                alert('Please write something in your diary first!');
+                return;
+            }
+            
+            // Disable submit button and show loading state
+            submitButton.disabled = true;
+            submitButton.classList.add('loading');
+            submitButton.textContent = 'Saving...';
+            
+            try {
+                // Save to local storage
+                localStorage.setItem('diaryEntry', entryText);
+                localStorage.setItem('diary_completed', 'true');
+                
+                // Clear temp storage after successful save
+                clearTempStorage();
+
+                // Update UI
+                submitButton.style.display = 'none';
+                document.getElementById('entry').disabled = true;
+                successMessage.style.display = 'block';
+
+            } catch (error) {
+                console.error("Error saving diary entry:", error);
+                
+                submitButton.classList.remove('loading');
+                submitButton.textContent = 'Error!';
+                submitButton.classList.add('error');
+
+                // Reset button after delay
+                setTimeout(() => {
+                    submitButton.textContent = 'Save Entry';
+                    submitButton.classList.remove('error');
+                    submitButton.disabled = false;
+                }, 2000);
+            }
+        });
+
+        // Optimize back button
+        function goBack() {
+            localStorage.setItem('returnToPanel16', 'true');
+            localStorage.setItem('spelling_completed', 'true');
+            localStorage.setItem('flashcard_completed', 'true');
+            
+            if (window.LogRocket) {
+                LogRocket.track('Diary Back Button Clicked');
+            }
+            window.location.href = './episode1.html';
+        }
+
+        // Auto-save while typing
+        let typingTimer;
+        const TYPING_DEBOUNCE = 2000;
+        const entryField = document.getElementById('entry');
+        
+        entryField.addEventListener('input', function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                if (this.value.length > 0) {
+                    saveToLocalStorage(this.value);
+                }
+            }, TYPING_DEBOUNCE);
+        });
+    </script>
+    <!-- Disable search functionality -->
+    <script src="../disable-search.js"></script>
+</body>
+</html>
